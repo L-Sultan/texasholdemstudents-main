@@ -2,6 +2,8 @@ import { expect } from "chai";
 import { buildDeck } from "../../deck.js";
 import { makeHand } from "../../handMaker.js";
 
+// straight = suite
+
 describe('poker hands creation', () => {
     
     it('manages straight', () => {

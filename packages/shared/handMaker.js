@@ -3,15 +3,80 @@ function makeHand(origCards) {
     cardsByRank.sort(byRank)
     //TODO : all other kind of hands
     //Exemple:
-    // if (isPair()) {
-    //     return makePair(cardsByRank)
-    // }
+    let counts = countPairs(origCards)
+    if (isPair(counts)) {
+        return makePair(cardsByRank) // à créer de la meme maniere que make single card
+    }
+    if (isDoublePair(counts)) {
+        return makeDoublePair(cardsByRank)
+    }
+    if (isThreeOfAKind(counts)) {
+        return makeThreeOfAKind(cardsByRank)
+    }
+    if (isQuad(counts)) {
+        return makeQuad(cardsByRank)
+    }
     return makeSingleCard(cardsByRank)
+}
+function getUniqueRanks(array) {
+    const values = []
+    for (const val of array) {
+        if (!values.some((v) => v.rank === val.rank)) {
+            values.push(val.rank)
+        }
+    }
+    return values
+}
+
+function countPairs(hand) {
+    let values = getUniqueRanks(hand)
+    let counts = {}
+    for (let val of values) {
+        counts[val] = hand.filter((c) => c.rank === val).length
+    }
+    return counts
 }
 
 function makeSingleCard(cardsByRank) {
     const hand = {}
     hand.type = 'high'
+    hand.rank = cardsByRank[0].rank
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    return hand
+}
+
+function makePair(cardsByRank) {
+    const hand = {}
+    hand.type = 'pair'
+    hand.rank = cardsByRank[0].rank
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    return hand
+}
+
+function makeDoublePair(cardsByRank, counts) {
+    const hand = {}
+    hand.type = 'double'
+    //let entries = Object.values(counts)
+    //entries.sort()
+    console.log("cardsByRank = ",cardsByRank)
+    console.log("counts = ",counts)
+    hand.rank = cardsByRank[0].rank
+    hand.sideRank = cardsByRank[3].rank
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank).filter((c) => c.rank !== hand.sideRank)
+    return hand
+}
+
+function makeThreeOfAKind(cardsByRank) {
+    const hand = {}
+    hand.type = 'three'
+    hand.rank = cardsByRank[0].rank
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    return hand
+}
+
+function makeQuad(cardsByRank) {
+    const hand = {}
+    hand.type = 'quad'
     hand.rank = cardsByRank[0].rank
     hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
     return hand
@@ -30,9 +95,15 @@ function byRank(c1, c2) {
     return c2.rank - c1.rank
 }
 
-function isQuad(c1, c2, c3, c4) {
+function isQuad(counts) {
     let res = false
-    if (c1.rank == c2.rank && c1.rank == c3.rank === 1 && c3.rank == c4.rank) {
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    
+    if (entries[1] === 4 && entries [0] === 1) {
         res = true
     }
     else {
@@ -41,7 +112,7 @@ function isQuad(c1, c2, c3, c4) {
     return res
 }
 
-function isFullHouse(c1, c2, c3, c4, c5) {
+function isFullHouse(counts) {
     let res = false
     if (c1.rank == c2.rank && c1.rank == c3.rank && c1.rank !== c4.rank && c4.rank == c5.rank) {
         res = true
@@ -52,9 +123,14 @@ function isFullHouse(c1, c2, c3, c4, c5) {
     return res
 }
 
-function isThreeOfAKind(c1, c2, c3) {
+function isThreeOfAKind(counts) {
     let res = false
-    if (c1.rank == c2.rank && c1.rank == c3.rank) {
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    if (entries[2] === 3 && entries[1] === 1 && entries[0] === 1) {
         res = true
     }
     else {
@@ -63,9 +139,14 @@ function isThreeOfAKind(c1, c2, c3) {
     return res
 }
 
-function isDoublePair(c1, c2, c3, c4) {
+function isDoublePair(counts) {
     let res = false
-    if (c1.rank == c2.rank && c1.rank !== c3.rank && c3.rank == c4.rank) {
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    if (entries[2] === 2 && entries[1] === 2 && entries[0] === 1) {
         res = true
     }
     else {
@@ -76,12 +157,19 @@ function isDoublePair(c1, c2, c3, c4) {
 
 function isPair(counts) {
     let res = false
-    if (c1.rank == c2.rank) {
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    
+    if (entries[3] === 2 && entries[0] === 1 && entries[1] === 1 && entries[2] === 1) {
         res = true
     }
     else {
         res = false
     }
+    console.log(counts)
     return res
 }
 

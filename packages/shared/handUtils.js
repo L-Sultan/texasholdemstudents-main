@@ -29,7 +29,7 @@ function buildPair(deck) {
     hand.sort(byRank)
     let idx = deck.findIndex((c) => c.rank === hand[0].rank) // cherche une carte de meme valeur que la plus haute carte
     let tmp = hand[1] // memorise la 2e carte de la main 
-    hand[1] = deck.splice(idx, 1)[0] // remplace la carté précédente (tmp) (splice veut dire enlever carte du deck et la met ds la main)
+    hand[1] = deck.splice(idx, 1)[0] // remplace la carte précédente (tmp) (splice veut dire enlever carte du deck et la met ds la main)
     deck.push(tmp) // remet ds le deck la carte inutile
     
     return hand

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { buildDeck } from "../../deck.js";
 import { makeHand } from "../../handMaker.js";
-
+ // suite + meme famille
 describe('poker hands creation', () => {
     
     it('manages non-royal straight flush', () => {

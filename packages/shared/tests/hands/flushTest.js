@@ -2,6 +2,8 @@ import { expect } from "chai";
 import { buildDeck } from "../../deck.js";
 import { makeHand } from "../../handMaker.js";
 
+// 5 cartes meme famille (par ex full carreau)
+
 describe('poker hands creation', () => {
     
     it('manages flush', () => {
