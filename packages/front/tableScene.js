@@ -68,6 +68,7 @@ class PokerTable extends Phaser.Scene {
         this.foldButton.on('pointerdown', () => {
             console.log('passer...');
             this.server.emit("fold", this.player.seat);
+            this.hidePlayingButtons()
         });
     }
     preload() {
@@ -117,21 +118,43 @@ class PokerTable extends Phaser.Scene {
     showCards(seat, cards) {
         let card1 = this.createCard(cards[0], cardParams.opponentScale)
         let card2 = this.createCard(cards[1], cardParams.opponentScale)
+        let card3 = this.createCard(cards[2], cardParams.opponentScale)
+        let card4 = this.createCard(cards[3], cardParams.opponentScale)
+        let card5 = this.createCard(cards[4], cardParams.opponentScale)
         let oldCards = this.seats[seat].cardsSprites
+
         card1.x = oldCards[0].x
         card1.y = oldCards[0].y
         oldCards[0].destroy()
         oldCards[0] = card1
+
         card2.x = oldCards[1].x
         card2.y = oldCards[1].y
         oldCards[1].destroy()
         oldCards[1] = card2
+
+        card3.x = oldCards[2].x
+        card3.y = oldCards[2].y
+        oldCards[2].destroy()
+        oldCards[2] = card3
+
+        card4.x = oldCards[3].x
+        card4.y = oldCards[3].y
+        oldCards[3].destroy()
+        oldCards[3] = card4
+
+        card5.x = oldCards[4].x
+        card5.y = oldCards[4].y
+        oldCards[4].destroy()
+        oldCards[4] = card5
+
     }
     dealOpenCards(seat, cards, isPocketCards) {
         let scale = cardParams.opponentScale
         if (isPocketCards) {
             scale = cardParams.pocketScale
         }
+
         let card1 = this.createCard(cards[0], cardParams.pocketScale)
         // card1.x = 0
         // card1.y = 0
@@ -140,11 +163,42 @@ class PokerTable extends Phaser.Scene {
         this.seats[seat].cardsSprites.push(card1)
         this.dealCard(card1, this.seats[seat].x, this.seats[seat].y, () => {
             console.log("deal seat", seat);
+
             let card2 = this.createCard(cards[1], cardParams.pocketScale)
-            // card2.x = 0
-            // card2.y = 0
+            // card1.x = 0
+            // card1.y = 0
+            // this.seats[seat].cardsSprites = []
+            console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
             this.seats[seat].cardsSprites.push(card2)
-            this.dealCard(card2, this.seats[seat].x + (cardParams.width * scale) * 1.2, this.seats[seat].y)
+            this.dealCard(card2, this.seats[seat].x, this.seats[seat].y, () => {
+                console.log("deal seat", seat);
+
+                let card3 = this.createCard(cards[2], cardParams.pocketScale)
+                // card1.x = 0
+                // card1.y = 0
+                // this.seats[seat].cardsSprites = []
+                console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
+                this.seats[seat].cardsSprites.push(card3)
+                this.dealCard(card3, this.seats[seat].x, this.seats[seat].y, () => {
+                    console.log("deal seat", seat);
+
+                    let card4 = this.createCard(cards[3], cardParams.pocketScale)
+                    // card1.x = 0
+                    // card1.y = 0
+                    // this.seats[seat].cardsSprites = []
+                    console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
+                    this.seats[seat].cardsSprites.push(card4)
+                    this.dealCard(car42, this.seats[seat].x, this.seats[seat].y, () => {
+                        console.log("deal seat", seat);
+
+                        let card5 = this.createCard(cards[4], cardParams.pocketScale)
+                        // card2.x = 0
+                        // card2.y = 0
+                        this.seats[seat].cardsSprites.push(card5)
+                        this.dealCard(card5, this.seats[seat].x + (cardParams.width * scale) * 1.2, this.seats[seat].y)
+                    })
+                })
+            })
         })
     }
 
@@ -153,20 +207,42 @@ class PokerTable extends Phaser.Scene {
         if (isPocketCards) {
             scale = cardParams.pocketScale
         }
+        
         let card1 = this.createCard(null, scale)
         console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
-        console.log(card1, this.seats[seat].cardsSprites);
-        // card1.x = 0
-        // card1.y = 0
+        console.log(card1, this.seats[seat].cardsSprites); 
         this.seats[seat].cardsSprites.push(card1)
         this.dealCard(card1, this.seats[seat].x, this.seats[seat].y, () => {
             console.log("deal cover...");
+
             let card2 = this.createCard(null, scale)
-            // card2.x = 0
-            // card2.y = 0
+            console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
+            console.log(card2, this.seats[seat].cardsSprites);
             this.seats[seat].cardsSprites.push(card2)
-            this.dealCard(card2, this.seats[seat].x + (cardParams.width * scale), this.seats[seat].y, () => {
-                console.log("play...");
+            this.dealCard(card2, this.seats[seat].x, this.seats[seat].y, () => {
+                console.log("deal cover...");
+
+                let card3 = this.createCard(null, scale)
+                console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
+                console.log(card3, this.seats[seat].cardsSprites);
+                this.seats[seat].cardsSprites.push(card3)
+                this.dealCard(card3, this.seats[seat].x, this.seats[seat].y, () => {
+                    console.log("deal cover...");
+
+                    let card4 = this.createCard(null, scale)
+                    console.log(seat, this.seats[seat], this.seats[seat].cardsSprites);
+                    console.log(card4, this.seats[seat].cardsSprites);
+                    this.seats[seat].cardsSprites.push(card4)
+                    this.dealCard(card4, this.seats[seat].x, this.seats[seat].y, () => {
+                        console.log("deal cover...");
+
+                            let card5 = this.createCard(null, scale)
+                            this.seats[seat].cardsSprites.push(card5)
+                            this.dealCard(card5, this.seats[seat].x + (cardParams.width * scale), this.seats[seat].y, () => {
+                            console.log("play...");
+                            })
+                    })
+                })
             })
         })
     }
@@ -191,7 +267,7 @@ class PokerTable extends Phaser.Scene {
 
                         let card5 = this.createCard(flop[4], scale)
                         this.flop[4].cardsSprite = card5
-                        this.dealCard(card5, this.flop[5].x, this.flop[5].y)
+                        this.dealCard(card5, this.flop[4].x, this.flop[4].y)
                     })
                 })
             })
@@ -202,11 +278,23 @@ class PokerTable extends Phaser.Scene {
 
         let card1 = this.seats[seat].cardsSprites[0]
         let card2 = this.seats[seat].cardsSprites[1]
+        let card3 = this.seats[seat].cardsSprites[2]
+        let card4 = this.seats[seat].cardsSprites[3]
+        let card5 = this.seats[seat].cardsSprites[4]
         this.dealCard(card1, -100, -100, () => {
             card1.destroy()
         })
         this.dealCard(card2, -100, -100, () => {
             card2.destroy()
+        })
+        this.dealCard(card3, -100, -100, () => {
+            card3.destroy()
+        })
+        this.dealCard(card4, -100, -100, () => {
+            card4.destroy()
+        })
+        this.dealCard(card5, -100, -100, () => {
+            card5.destroy()
         })
         this.seats[seat].cardsSprites = []
     }

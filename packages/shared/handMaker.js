@@ -16,6 +16,12 @@ function makeHand(origCards) {
     if (isQuad(counts)) {
         return makeQuad(cardsByRank)
     }
+    if (isFullHouse(counts)) {
+        return makeFullHouse(cardsByRank)
+    }
+    if (isFlush(counts)) {
+        return makeFlush(cardsByRank)
+    }
     return makeSingleCard(cardsByRank)
 }
 function getUniqueRanks(array) {
@@ -82,6 +88,31 @@ function makeQuad(cardsByRank) {
     return hand
 }
 
+function makeFullHouse(cardsByRank, counts) {
+    const hand = {}
+    hand.type = 'fullhouse'
+    // let entries = Object.values(counts)
+    // entries.sort()
+    console.log("cardsByRank = ",cardsByRank)
+    console.log("counts = ",counts)
+    hand.rank = cardsByRank[0].rank
+    hand.sideRank = cardsByRank[5].rank
+    //hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank).filter((c) => c.rank !== hand.sideRank)
+    return hand
+}
+
+function makeFlush(cardsByRank, counts) {
+    const hand = {}
+    hand.type = 'flush'
+    console.log("cardsByRank = ",cardsByRank)
+    console.log("counts = ",counts)
+    hand.rank = cardsByRank[0].rank
+    hand.type = 'diamond'
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    return hand
+}
+
 function byRank(c1, c2) {
     if (c1.rank === 1 && c2.rank === 1) {
         return 0
@@ -114,7 +145,12 @@ function isQuad(counts) {
 
 function isFullHouse(counts) {
     let res = false
-    if (c1.rank == c2.rank && c1.rank == c3.rank && c1.rank !== c4.rank && c4.rank == c5.rank) {
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    if (entries[0] === 2 && entries[1] === 3) {
         res = true
     }
     else {
@@ -173,4 +209,21 @@ function isPair(counts) {
     return res
 }
 
-export { makeHand, byRank, isPair, isDoublePair, isThreeOfAKind, isFullHouse, isQuad}
+function isFlush(counts) {
+    let res = false
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    
+    if (entries === 'diamond') {
+        res = true
+    }
+    else {
+        res = false
+    }
+    console.log(counts)
+    return res
+}
+export { makeHand, byRank, isPair, isDoublePair, isThreeOfAKind, isFullHouse, isQuad, isFlush}
