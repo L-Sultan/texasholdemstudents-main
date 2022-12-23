@@ -22,6 +22,9 @@ function makeHand(origCards) {
     if (isFlush(counts)) {
         return makeFlush(cardsByRank)
     }
+    if (isStraight(counts)) {
+        return makeStraight(cardsByRank)
+    }
     return makeSingleCard(cardsByRank)
 }
 function getUniqueRanks(array) {
@@ -109,6 +112,14 @@ function makeFlush(cardsByRank, counts) {
     console.log("counts = ",counts)
     hand.rank = cardsByRank[0].rank
     hand.type = 'diamond'
+    hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
+    return hand
+}
+
+function makeStraight(cardsByRank) {
+    const hand = {}
+    hand.type = 'straight'
+    hand.rank = cardsByRank[0].rank
     hand.kickers = cardsByRank.filter((c) => c.rank !== hand.rank)
     return hand
 }
@@ -226,4 +237,22 @@ function isFlush(counts) {
     console.log(counts)
     return res
 }
-export { makeHand, byRank, isPair, isDoublePair, isThreeOfAKind, isFullHouse, isQuad, isFlush}
+
+function isStraight(counts) {
+    let res = false
+    let entries = Object.values(counts)
+    entries.sort()
+    for(let entry of entries) {
+        console.log("entries : ",entry)
+    }
+    
+    if (entries[0] < entries[1] && entries[1] < entries[2] && entries[2] < entries[3] && entries[3] < entries[4] && entries[4] < entries[5]) {
+        res = true
+    }
+    else {
+        res = false
+    }
+    console.log(counts)
+    return res
+}
+export { makeHand, byRank, isPair, isDoublePair, isThreeOfAKind, isFullHouse, isQuad, isFlush, isStraight}
